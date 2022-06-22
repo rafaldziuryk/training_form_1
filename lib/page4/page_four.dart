@@ -1,16 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:form_1/page3/checkbox_form_field.dart';
-import 'package:form_1/page3/custom_validator.dart';
+import 'package:form_1/page4/checkbox_form_field.dart';
+import 'package:form_1/page4/custom_validator.dart';
+import 'package:dio/dio.dart';
 
-class PageThree extends StatefulWidget {
-  const PageThree({Key? key}) : super(key: key);
+class PageFour extends StatefulWidget {
+  const PageFour({Key? key}) : super(key: key);
 
   @override
-  State<PageThree> createState() => _PageThreeState();
+  State<PageFour> createState() => _PageFourState();
 }
 
-class _PageThreeState extends State<PageThree> {
+class _PageFourState extends State<PageFour> {
   final formKey = GlobalKey<FormState>();
+  final login = TextEditingController();
+  final password = TextEditingController();
   final loginValidator = CustomValidator<String>((value) {
     if (value == null || value.isEmpty) {
       return 'Please enter some text';
@@ -33,9 +36,11 @@ class _PageThreeState extends State<PageThree> {
               children: [
                 TextFormField(
                   validator: loginValidator,
+                  controller: login,
                 ),
                 TextFormField(
                   validator: loginValidator,
+                  controller: password,
                 ),
                 CheckboxFormField(
                   title: Text('Regulations'),
@@ -46,15 +51,22 @@ class _PageThreeState extends State<PageThree> {
             ),
           ),
           ElevatedButton(
-            onPressed: () {
-              final mockLoginFailed = true;
-
-              if (mockLoginFailed) {
-                loginValidator.externalError = 'Auth failed';
-              } else {
+            onPressed: () async {
+              final dio = Dio();
+              try {
+                final result = await dio.get('https://trainingserver1.herokuapp.com/login', queryParameters: {
+                  'login': login.text,
+                  'password': password.text,
+                });
                 loginValidator.externalError = null;
+                formKey.currentState?.validate();
+              } catch (e) {
+                final error = e as DioError;
+                if (error.response?.statusCode == 404) {
+                  loginValidator.externalError = 'Auth failed';
+                  formKey.currentState?.validate();
+                }
               }
-              formKey.currentState?.validate();
             },
             child: Text('validate'),
           ),

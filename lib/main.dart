@@ -3,6 +3,7 @@ import 'package:form_1/page0/page_zero.dart';
 import 'package:form_1/page1/page_one.dart';
 import 'package:form_1/page2/page_two.dart';
 import 'package:form_1/page3/page_three.dart';
+import 'package:form_1/page4/page_four.dart';
 
 void main() {
   runApp(const MyApp());
@@ -57,6 +58,12 @@ class MyHomePage extends StatelessWidget {
                 builder: (context) => const PageThree(),
               )),
               child: const Text('Step 3'),
+            ),
+            ElevatedButton(
+              onPressed: () => Navigator.of(context).push(MaterialPageRoute(
+                builder: (context) => const PageFour(),
+              )),
+              child: const Text('Step 4'),
             ),
           ],
         ),
