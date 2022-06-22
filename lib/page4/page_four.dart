@@ -54,7 +54,7 @@ class _PageFourState extends State<PageFour> {
             onPressed: () async {
               final dio = Dio();
               try {
-                final result = await dio.get('https://trainingserver1.herokuapp.com/login', queryParameters: {
+                await dio.get('https://trainingserver1.herokuapp.com/login', queryParameters: {
                   'login': login.text,
                   'password': password.text,
                 });
