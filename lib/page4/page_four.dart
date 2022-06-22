@@ -62,7 +62,7 @@ class _PageFourState extends State<PageFour> {
                 formKey.currentState?.validate();
               } catch (e) {
                 final error = e as DioError;
-                if (error.response?.statusCode == 404) {
+                if (error.response?.statusCode == 403) {
                   loginValidator.externalError = 'Auth failed';
                   formKey.currentState?.validate();
                 }
